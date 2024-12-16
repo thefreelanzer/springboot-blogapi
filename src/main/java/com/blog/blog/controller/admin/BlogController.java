@@ -5,10 +5,7 @@ import com.blog.blog.dtos.BlogsDto;
 import com.blog.blog.service.BlogService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
 @RequestMapping("api/v1/admin/blogs")
@@ -25,5 +22,12 @@ public class BlogController {
         BlogsDto createdBlog = blogService.createBlog(blogsDto);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(new AppResponse<>(createdBlog, true, "Blog created successfully"));
+    }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<AppResponse<BlogsDto>> deleteBlog(@PathVariable int id) {
+        blogService.deleteBlog(id);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(new AppResponse<>(null, true, "Blog deleted successfully"));
     }
 }

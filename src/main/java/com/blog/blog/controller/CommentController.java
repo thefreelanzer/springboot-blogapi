@@ -7,13 +7,10 @@ import com.blog.blog.service.BlogService;
 import com.blog.blog.service.CommentService;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.PostMapping;
-import org.springframework.web.bind.annotation.RequestBody;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RestController;
+import org.springframework.web.bind.annotation.*;
 
 @RestController
-@RequestMapping("api/v1/comment")
+@RequestMapping("api/v1/blogs/comment")
 public class CommentController {
 
     private final CommentService commentService;
@@ -28,4 +25,12 @@ public class CommentController {
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(new AppResponse<>(savedComment, true, "Comment added successfully"));
     }
+
+    @DeleteMapping("/delete/{id}")
+    public ResponseEntity<AppResponse<BlogsDto>> deleteBlog(@PathVariable int id) {
+        commentService.deleteComment(id);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(new AppResponse<>(null, true, "Comment deleted successfully"));
+    }
+
 }

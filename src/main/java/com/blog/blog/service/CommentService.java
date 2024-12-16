@@ -38,4 +38,20 @@ public class CommentService {
 
         return commentsDto;
     }
+
+    public void deleteComment(Integer id) {
+        Comments comment = commentRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Comment not found with id: " + id));
+
+        // Check if the comment was created by the current user
+        User currentUser = AuthUtils.getCurrentUserDetails();
+
+        if (!comment.getCreatedUser().getId().equals(currentUser.getId())) {
+            throw new RuntimeException("You are not authorized to delete this comment.");
+        }
+
+        // Set the deleted_at field to mark the comment as deleted
+        comment.setDeletedAt(LocalDateTime.now());
+        commentRepository.save(comment);
+    }
 }

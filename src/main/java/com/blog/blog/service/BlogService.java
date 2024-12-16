@@ -6,6 +6,7 @@ import com.blog.blog.dtos.CurrentUserDto;
 import com.blog.blog.entity.Blogs;
 import com.blog.blog.entity.User;
 import com.blog.blog.repository.BlogRepository;
+import com.blog.blog.repository.CommentRepository;
 import com.blog.blog.utils.AuthUtils;
 import jakarta.transaction.Transactional;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -20,6 +21,9 @@ public class BlogService {
 
     @Autowired
     private BlogRepository blogRepository;
+
+    @Autowired
+    private CommentRepository commentRepository;
 
     public BlogsDto createBlog(BlogsDto blogsDto) {
 
@@ -46,7 +50,7 @@ public class BlogService {
     @Transactional
     public List<BlogsDto> getAllBlogs() {
         // Fetch all blogs
-        List<Blogs> blogs = blogRepository.findAll();
+        List<Blogs> blogs = blogRepository.findAllByDeletedAtIsNull();
 
         // Map Blogs entity to BlogsDto
         return blogs.stream().map(blog -> {
@@ -96,5 +100,16 @@ public class BlogService {
 
             return blogsDto;
         }).collect(Collectors.toList());
+    }
+
+    @Transactional
+    public void deleteBlog(int id) {
+        Blogs blog = blogRepository.findById(id)
+                .orElseThrow(() -> new RuntimeException("Blog not found with id: " + id));
+
+        blog.setDeletedAt(LocalDateTime.now());
+        blogRepository.save(blog);
+
+        commentRepository.updateDeletedAtByBlogId(id, LocalDateTime.now());
     }
 }

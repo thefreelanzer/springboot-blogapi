@@ -9,4 +9,5 @@ import java.util.List;
 @Repository
 public interface BlogRepository extends JpaRepository<Blogs, Integer> {
     List<Blogs> findById(Long id);
+    List<Blogs> findAllByDeletedAtIsNull();
 }
