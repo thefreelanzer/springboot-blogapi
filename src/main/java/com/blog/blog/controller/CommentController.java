@@ -27,10 +27,17 @@ public class CommentController {
     }
 
     @DeleteMapping("/delete/{id}")
-    public ResponseEntity<AppResponse<BlogsDto>> deleteBlog(@PathVariable int id) {
+    public ResponseEntity<AppResponse<CommentsDto>> deleteComment(@PathVariable Integer id) {
         commentService.deleteComment(id);
         return ResponseEntity.status(HttpStatus.CREATED)
                 .body(new AppResponse<>(null, true, "Comment deleted successfully"));
+    }
+
+    @PutMapping("/update/{id}")
+    public ResponseEntity<AppResponse<CommentsDto>> updateComment(@PathVariable Integer id, @RequestBody CommentsDto commentsDto) {
+        CommentsDto updateComment = commentService.updateComment(id, commentsDto);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(new AppResponse<>(updateComment, true, "Comment updated successfully"));
     }
 
 }
