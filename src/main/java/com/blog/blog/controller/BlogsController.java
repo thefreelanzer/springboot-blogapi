@@ -1,5 +1,6 @@
 package com.blog.blog.controller;
 
+import com.blog.blog.dtos.AppResponse;
 import com.blog.blog.dtos.BlogsDto;
 import com.blog.blog.service.BlogService;
 import org.springframework.http.HttpStatus;
@@ -19,8 +20,10 @@ public class BlogsController {
     }
 
     @GetMapping
-    public ResponseEntity<List<BlogsDto>> getAllOrders() {
-        List<BlogsDto> orders = blogService.getAllBlogs();
-        return ResponseEntity.ok(orders);
+    public ResponseEntity<AppResponse<List<BlogsDto>>> getAllOrders() {
+        List<BlogsDto> blogs = blogService.getAllBlogs();
+        return ResponseEntity.ok(
+                new AppResponse<>(blogs, true, "Blogs fetched successfully")
+        );
     }
 }

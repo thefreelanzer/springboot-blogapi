@@ -1,5 +1,6 @@
 package com.blog.blog.controller;
 
+import com.blog.blog.dtos.AppResponse;
 import com.blog.blog.dtos.BlogsDto;
 import com.blog.blog.dtos.CommentsDto;
 import com.blog.blog.service.BlogService;
@@ -22,8 +23,9 @@ public class CommentController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<CommentsDto> addComment(@RequestBody CommentsDto commentsDto) {
-        commentsDto = commentService.addComment(commentsDto);
-        return new ResponseEntity<>(commentsDto, HttpStatus.CREATED);
+    public ResponseEntity<AppResponse<CommentsDto>> addComment(@RequestBody CommentsDto commentsDto) {
+        CommentsDto savedComment = commentService.addComment(commentsDto);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(new AppResponse<>(savedComment, true, "Comment added successfully"));
     }
 }

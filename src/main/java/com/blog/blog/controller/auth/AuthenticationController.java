@@ -1,4 +1,6 @@
 package com.blog.blog.controller.auth;
+
+import com.blog.blog.dtos.AppResponse;
 import com.blog.blog.service.auth.AuthenticationService;
 import jakarta.validation.Valid;
 import lombok.RequiredArgsConstructor;
@@ -16,12 +18,18 @@ public class AuthenticationController {
     private final AuthenticationService authenticationService;
 
     @PostMapping("/register")
-    public ResponseEntity<AuthenticationResponse> register(@Valid @RequestBody RegisterRequest request) {
-        return  ResponseEntity.ok(authenticationService.register(request));
+    public ResponseEntity<AppResponse<AuthenticationResponse>> register(@Valid @RequestBody RegisterRequest request) {
+        AuthenticationResponse response = authenticationService.register(request);
+        return ResponseEntity.ok(
+                new AppResponse<>(response, true, "User registered successfully")
+        );
     }
 
     @PostMapping("/authenticate")
-    public ResponseEntity<AuthenticationResponse> authenticate(@Valid @RequestBody AuthenticateRequest request) {
-        return  ResponseEntity.ok(authenticationService.authenticate(request));
+    public ResponseEntity<AppResponse<AuthenticationResponse>> authenticate(@Valid @RequestBody AuthenticateRequest request) {
+        AuthenticationResponse response = authenticationService.authenticate(request);
+        return ResponseEntity.ok(
+                new AppResponse<>(response, true, "Authenticated!")
+        );
     }
 }

@@ -1,5 +1,6 @@
 package com.blog.blog.controller.admin;
 
+import com.blog.blog.dtos.AppResponse;
 import com.blog.blog.dtos.BlogsDto;
 import com.blog.blog.service.BlogService;
 import org.springframework.http.HttpStatus;
@@ -20,8 +21,9 @@ public class BlogController {
     }
 
     @PostMapping("/add")
-    public ResponseEntity<BlogsDto> addBlog(@RequestBody BlogsDto blogsDto) {
-        blogsDto = blogService.createBlog(blogsDto);
-        return new ResponseEntity<>(blogsDto, HttpStatus.CREATED);
+    public ResponseEntity<AppResponse<BlogsDto>> addBlog(@RequestBody BlogsDto blogsDto) {
+        BlogsDto createdBlog = blogService.createBlog(blogsDto);
+        return ResponseEntity.status(HttpStatus.CREATED)
+                .body(new AppResponse<>(createdBlog, true, "Blog created successfully"));
     }
 }
