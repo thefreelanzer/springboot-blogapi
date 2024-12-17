@@ -33,7 +33,7 @@ public class CommentService {
         return commentsDto;
     }
 
-    public void deleteComment(Integer id) {
+    public String deleteComment(Integer id) {
 
         Comments comment = findCommentById(id);
 
@@ -42,6 +42,8 @@ public class CommentService {
 
         comment.setDeletedAt(LocalDateTime.now());
         commentRepository.save(comment);
+
+        return  "The comment with ID " + id + " has been deleted successfully.";
     }
 
     public CommentsDto updateComment(Integer id, CommentsDto commentsDto) {
